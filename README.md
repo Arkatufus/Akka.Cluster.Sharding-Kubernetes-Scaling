@@ -25,12 +25,12 @@ This repository is a clone of [Akka.NET](https://github.com/akkadotnet/akka.net)
    - Serve Kubernetes Dashboard using `kubectl proxy`
 5. In a web browser, navigate to the dashboard at [http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/](http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/)
 6. Copy the dashboard web token from the terminal.
-   [Web token in terminal](./docs/images/Terminal.png)
+   ![Web token in terminal](./docs/images/Terminal.png)
 7. Paste the dashboard web token shown in the terminal into the dashboard login screen.
-   [Dashboard login screen](./docs/images/LoginScreen.png)
+   ![Dashboard login screen](./docs/images/LoginScreen.png)
 8. In the dashboard, switch to `shopping-cart` namespace
 9. In the dashboard, click the Pods Workloads
-   [Kubernetes dashboard](./docs/images/Dashboard.png)
+   ![Kubernetes dashboard](./docs/images/Dashboard.png)
 10. Watch the backend pods being scaled up as CPU consumption rises.
 
 ## Stopping The Example
