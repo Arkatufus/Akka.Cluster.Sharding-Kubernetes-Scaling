@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+spec:
+  publishNotReadyAddresses: true
+  clusterIP: None
+  ports:
+    - port: 8558
+      name: management
+    - port: 5055
+      name: akka-remote
+  selector:
+    app: frontend
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+    cluster: shopping-cart
+spec:
+  serviceName: frontend
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+        cluster: shopping-cart
+    spec:
+      terminationGracePeriodSeconds: 35
+      containers:
+      - name: frontend
+        image: shopping-cart:1.0.0
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh", "-c", "pbm 127.0.0.1:9110 cluster leave"]
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: CLUSTER__PORT
+          value: "5055"
+        - name: CLUSTER__IP
+          value: "$(POD_NAME).frontend"
+        - name: CLUSTER__STARTUPMETHOD
+          value: "KubernetesDiscovery"
+        - name: CLUSTER__READINESSPORT 
+          value: "11001"
+        - name: CLUSTER__PBMPORT 
+          value: "9110"
+        - name: CLUSTER__ISDOCKER
+          value: "true"         
+        - name: CLUSTER__DISCOVERY__SERVICENAME
+          value: "shopping-cart"
+        - name: CLUSTER__DISCOVERY__PORTNAME
+          value: "management"
+        - name: CLUSTER__DISCOVERY__MANAGEMENTPORT
+          value: "8558"
+        - name: CLUSTER__DISCOVERY__LABELSELECTOR
+          value: "cluster={0}"
+        - name: IS_FRONTEND
+          value: "true"
+        livenessProbe:
+          tcpSocket:
+            port: 11001
+        readinessProbe:
+          tcpSocket: 
+            port: 5055
+        ports:
+          - containerPort: 8558
+            protocol: TCP
+            name: management
+          - containerPort: 5055
+            protocol: TCP
+            name: akka-remote

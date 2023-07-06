@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Akka.Cluster.Sharding.Scaling", "Akka.Cluster.Sharding.Scaling\Akka.Cluster.Sharding.Scaling.csproj", "{45219A34-299A-4AD9-9AA9-F54CBD8AC772}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{6BC0B6E7-3302-45C2-91C2-DF78C1D3AB04}"
+	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
+		docker-compose.yaml = docker-compose.yaml
+		Dockerfile = Dockerfile
+		start.cmd = start.cmd
+		destroy-k8s.cmd = destroy-k8s.cmd
+		start-k8s.cmd = start-k8s.cmd
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "k8s", "k8s", "{66235EB8-9F59-4240-92EB-90E727038473}"
+	ProjectSection(SolutionItems) = preProject
+		k8s\deployAll.cmd = k8s\deployAll.cmd
+		k8s\destroyAll.cmd = k8s\destroyAll.cmd
+		k8s\events.cmd = k8s\events.cmd
+		k8s\status.cmd = k8s\status.cmd
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "services", "services", "{79A5B921-7747-4D61-B05F-7D1E25E53052}"
+	ProjectSection(SolutionItems) = preProject
+		k8s\services\k8s-backend-service.yaml = k8s\services\k8s-backend-service.yaml
+		k8s\services\k8s-frontend-service.yaml = k8s\services\k8s-frontend-service.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "environments", "environments", "{63BB5870-FF74-4A0C-925C-0F21AA2253BA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "configs", "configs", "{76D10C39-8AAB-4523-A48C-7E8111B3B1EA}"
+	ProjectSection(SolutionItems) = preProject
+		k8s\environment\configs\k8s-crd.yaml = k8s\environment\configs\k8s-crd.yaml
+		k8s\environment\configs\k8s-rbac.yaml = k8s\environment\configs\k8s-rbac.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infrastructure", "infrastructure", "{5447657F-DD4F-471A-B6AC-4E1B65AD1BC2}"
+	ProjectSection(SolutionItems) = preProject
+		k8s\infrastructure\dashboard.yaml = k8s\infrastructure\dashboard.yaml
+		k8s\infrastructure\metrics.yaml = k8s\infrastructure\metrics.yaml
+		k8s\infrastructure\rbac.yaml = k8s\infrastructure\rbac.yaml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{45219A34-299A-4AD9-9AA9-F54CBD8AC772}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45219A34-299A-4AD9-9AA9-F54CBD8AC772}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45219A34-299A-4AD9-9AA9-F54CBD8AC772}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45219A34-299A-4AD9-9AA9-F54CBD8AC772}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{66235EB8-9F59-4240-92EB-90E727038473} = {6BC0B6E7-3302-45C2-91C2-DF78C1D3AB04}
+		{79A5B921-7747-4D61-B05F-7D1E25E53052} = {66235EB8-9F59-4240-92EB-90E727038473}
+		{63BB5870-FF74-4A0C-925C-0F21AA2253BA} = {66235EB8-9F59-4240-92EB-90E727038473}
+		{76D10C39-8AAB-4523-A48C-7E8111B3B1EA} = {63BB5870-FF74-4A0C-925C-0F21AA2253BA}
+		{5447657F-DD4F-471A-B6AC-4E1B65AD1BC2} = {66235EB8-9F59-4240-92EB-90E727038473}
+	EndGlobalSection
+EndGlobal
