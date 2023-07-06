@@ -19,19 +19,19 @@ echo Using namespace [%namespace%] going forward...
 
 echo Creating configurations from YAML files in [%location%/configs]
 for %%f in (%location%/configs/*.yaml) do (
-    echo "Deploying %%~nxf"
+    echo Deploying %%~nxf
     kubectl apply -f "%location%/configs/%%~nxf" -n "%namespace%"
 )
 
 echo Creating environment-specific services from YAML files in [%location%]
 for %%f in (%location%/*.yaml) do (
-    echo "Deploying %%~nxf"
+    echo Deploying %%~nxf
     kubectl apply -f "%location%/%%~nxf" -n "%namespace%"
 )
 
 echo Creating all services...
 for %%f in (%~dp0/services/*.yaml) do (
-    echo "Deploying %%~nxf"
+    echo Deploying %%~nxf
     kubectl apply -f "%~dp0/services/%%~nxf" -n "%namespace%"
 )
 
@@ -39,9 +39,11 @@ echo All services started.
 
 echo Kubernetes dashboard token:
 kubectl -n kubernetes-dashboard create token admin-user
-echo 
+echo ---
+
 echo Kubernetes dashboard url:
 echo "http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/"
-echo 
+echo ---
+
 echo Starting proxy server...
 kubectl proxy

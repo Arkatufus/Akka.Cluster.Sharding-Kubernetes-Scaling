@@ -7,9 +7,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		.dockerignore = .dockerignore
 		docker-compose.yaml = docker-compose.yaml
 		Dockerfile = Dockerfile
-		start.cmd = start.cmd
 		destroy-k8s.cmd = destroy-k8s.cmd
 		start-k8s.cmd = start-k8s.cmd
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "k8s", "k8s", "{66235EB8-9F59-4240-92EB-90E727038473}"
