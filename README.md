@@ -7,20 +7,66 @@ This repository is a clone of [Akka.NET](https://github.com/akkadotnet/akka.net)
 
 # How To Use The Example
 
-## Running The Example
+## Setup
 
 1. Make sure that you have Docker Desktop installed on your computer
 2. Make sure that Docker Desktop is running using WSL Linux containers
 3. Make sure that Docker Desktop Kubernetes feature is enabled
 4. In a Windows PowerShell terminal, navigate to the project directory and execute
    ```powershell
-   .\start-k8s.cmd
+   .\install-metrics.cmd
    ```
-   This will: 
-   - Compile the project, 
-   - Build the docker image
-   - Install Kubernetes metrics server
-   - Create an Akka.NET sharded cluster inside the `shopping-cart` namespace
+   You should see an output similar to this:
+   ```
+   PS C:\> .\install-metrics.cmd
+   serviceaccount/metrics-server created
+   clusterrole.rbac.authorization.k8s.io/system:aggregated-metrics-reader created
+   clusterrole.rbac.authorization.k8s.io/system:metrics-server created
+   rolebinding.rbac.authorization.k8s.io/metrics-server-auth-reader created
+   clusterrolebinding.rbac.authorization.k8s.io/metrics-server:system:auth-delegator created
+   clusterrolebinding.rbac.authorization.k8s.io/system:metrics-server created
+   service/metrics-server created
+   deployment.apps/metrics-server created
+   apiservice.apiregistration.k8s.io/v1beta1.metrics.k8s.io created
+   ```
+5. Wait a minute or so for Kubernetes `metrics-server` to spin up.
+6. Confirm that Kubernetes `metrics-server` is up by executing:
+   ```powershell
+   kubectl top node
+   ```
+   If `metrics-server` has been installed successfully, you should see an output similar to this:
+   ```
+   PS C:\> kubectl top node
+   NAME             CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%
+   docker-desktop   172m         2%     3041Mi          52%   
+   ```
+
+## Running The Example
+
+In a Windows PowerShell terminal, navigate to the project directory and execute
+```powershell
+.\start-k8s.cmd
+```
+This will: 
+- Compile the project, 
+- Build the docker image
+- Create an Akka.NET sharded cluster inside the `shopping-cart` namespace
+
+Execute `kubectl top pod -n shopping-cart` a few times until you see that `metrics-server` has successfully collected metrics from the pods:
+
+```
+PS C:\> kubectl top pod -n shopping-cart
+error: metrics not available yet
+PS C:\> kubectl top pod -n shopping-cart
+error: metrics not available yet
+PS C:\> kubectl top pod -n shopping-cart
+error: metrics not available yet
+PS C:\> kubectl top pod -n shopping-cart
+NAME         CPU(cores)   MEMORY(bytes)
+backend-0    39m          69Mi
+backend-1    58m          75Mi
+frontend-0   90m          89Mi
+```
 
 ## Confirming Auto-scaling
 

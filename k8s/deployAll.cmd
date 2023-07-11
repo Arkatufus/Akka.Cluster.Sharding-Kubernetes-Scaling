@@ -4,12 +4,6 @@ REM deploys all Kubernetes services to their staging environment
 set namespace=shopping-cart
 set location=%~dp0environment
 
-echo Installing metrics server from YAML files in [%~dp0/infrastructure]
-for %%f in (%~dp0/infrastructure/*.yaml) do (
-    echo Deploying %%~nxf
-    kubectl apply -f "%~dp0/infrastructure/%%~nxf"
-)
-
 echo Deploying K8s resources from [%location%] into namespace [%namespace%]
 
 echo Creating Namespaces...
