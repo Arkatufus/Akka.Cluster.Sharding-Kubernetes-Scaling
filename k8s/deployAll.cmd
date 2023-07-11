@@ -4,7 +4,7 @@ REM deploys all Kubernetes services to their staging environment
 set namespace=shopping-cart
 set location=%~dp0environment
 
-echo Installing metrics server, k8s dashboard, and local admin user from YAML files in [%~dp0/infrastructure]
+echo Installing metrics server from YAML files in [%~dp0/infrastructure]
 for %%f in (%~dp0/infrastructure/*.yaml) do (
     echo Deploying %%~nxf
     kubectl apply -f "%~dp0/infrastructure/%%~nxf"
@@ -36,14 +36,3 @@ for %%f in (%~dp0/services/*.yaml) do (
 )
 
 echo All services started.
-
-echo Kubernetes dashboard token:
-kubectl -n kubernetes-dashboard create token admin-user
-echo ---
-
-echo Kubernetes dashboard url:
-echo "http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/"
-echo ---
-
-echo Starting proxy server...
-kubectl proxy

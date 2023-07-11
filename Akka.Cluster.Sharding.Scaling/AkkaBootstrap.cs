@@ -181,7 +181,6 @@ public static class AkkaBootstrap
         }
         
         builder
-            .AddHocon(configuration.GetSection("Akka"), HoconAddMode.Prepend)
             .WithRemoting(remoteOptions)
             .WithClustering(clusterOptions)
             .WithAkkaManagement(managementOptions)

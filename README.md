@@ -20,22 +20,69 @@ This repository is a clone of [Akka.NET](https://github.com/akkadotnet/akka.net)
    - Compile the project, 
    - Build the docker image
    - Install Kubernetes metrics server
-   - Install Kubernetes Dashboard
    - Create an Akka.NET sharded cluster inside the `shopping-cart` namespace
-   - Serve Kubernetes Dashboard using `kubectl proxy`
-5. In a web browser, navigate to the dashboard at [http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/](http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/)
-6. Copy the dashboard web token from the terminal.
-   ![Web token in terminal](./docs/images/Terminal.png)
-7. Paste the dashboard web token shown in the terminal into the dashboard login screen.
-   ![Dashboard login screen](./docs/images/LoginScreen.png)
-8. In the dashboard, switch to `shopping-cart` namespace
-9. In the dashboard, click the Pods Workloads
-   ![Kubernetes dashboard](./docs/images/Dashboard.png)
-10. Watch the backend pods being scaled up as CPU consumption rises.
+
+## Confirming Auto-scaling
+
+1. The `frontend-0` pod will spawn 30 actors inside the `backend` stateful set cluster, creating a CPU spike on all 3 `backend` pods.
+2. Execute
+   ```powershell
+   kubectl top pod -n shopping-cart
+   ```
+   and check that backend pod CPU metrics spikes to above 800m
+   ```
+   PS C:\> kubectl top pod -n shopping-cart
+   NAME         CPU(cores)   MEMORY(bytes)
+   backend-0    1001m        86Mi
+   backend-1    975m         84Mi
+   backend-2    962m         83Mi
+   frontend-0   63m          99Mi   
+   ```
+3. The pod auto scaler will scale the `backend` cluster after a few seconds
+   ```powershell
+   PS C:\> kubectl top pod -n shopping-cart
+   NAME         CPU(cores)   MEMORY(bytes)
+   backend-0    21m          86Mi
+   backend-1    17m          87Mi
+   backend-2    18m          86Mi
+   backend-3    18m          87Mi
+   backend-4    17m          83Mi
+   backend-5    16m          88Mi
+   backend-6    17m          82Mi
+   backend-7    16m          91Mi
+   frontend-0   35m          99Mi
+   ```
+4. Shut down the `frontend-0` pod by scaling the `frontend` stateful set to 0. Execute:
+   ```powershell
+   kubectl scale --replicas=0 statefulset/frontend -n shopping-cart
+   ```
+5. Confirm that the `frontend-0` pod has been shut down by executing `kubectl top pod -n shopping-cart`
+   ```powershell
+   PS C:\> kubectl top pod -n shopping-cart
+   NAME        CPU(cores)   MEMORY(bytes)
+   backend-0   21m          87Mi
+   backend-1   21m          88Mi
+   backend-2   17m          84Mi
+   backend-3   20m          88Mi
+   backend-4   20m          84Mi
+   backend-5   26m          89Mi
+   backend-6   19m          83Mi
+   backend-7   17m          92Mi
+   ```
+   Note that `frontend-0` pod is now missing from the list
+6. Wait 5-10 minutes and check the cluster status again by executing `kubectl top pod -n shopping-cart`
+   ```powershell
+   PS C:\> kubectl top pod -n shopping-cart
+   NAME        CPU(cores)   MEMORY(bytes)
+   backend-0   21m          87Mi
+   backend-1   21m          88Mi
+   backend-2   17m          84Mi
+   ```
+   Note that the cluster has been automatically scaled down
 
 ## Stopping The Example
 
-To stop the Kubernetes cluster press `ctrl-c` in the terminal to stop the web proxy and execute:
+To stop the Kubernetes cluster, execute:
    ```powershell
    .\destroy-k8s.cmd
    ```

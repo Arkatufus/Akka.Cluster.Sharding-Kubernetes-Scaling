@@ -36,9 +36,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "configs", "configs", "{76D1
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infrastructure", "infrastructure", "{5447657F-DD4F-471A-B6AC-4E1B65AD1BC2}"
 	ProjectSection(SolutionItems) = preProject
-		k8s\infrastructure\dashboard.yaml = k8s\infrastructure\dashboard.yaml
 		k8s\infrastructure\metrics.yaml = k8s\infrastructure\metrics.yaml
-		k8s\infrastructure\rbac.yaml = k8s\infrastructure\rbac.yaml
 	EndProjectSection
 EndProject
 Global
