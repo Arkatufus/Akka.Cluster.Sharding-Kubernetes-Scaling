@@ -16,4 +16,11 @@ RUN dotnet tool install --global pbm
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+# copy .NET Core global tool
+COPY --from=base /root/.dotnet /root/.dotnet/
+
+# Needed because https://stackoverflow.com/questions/51977474/install-dotnet-core-tool-dockerfile
+ENV PATH="${PATH}:/root/.dotnet/tools"
+
 ENTRYPOINT ["dotnet", "Akka.Cluster.Sharding.Scaling.dll"]
