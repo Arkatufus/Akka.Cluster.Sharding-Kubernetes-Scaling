@@ -18,7 +18,7 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 
 # copy .NET Core global tool
-COPY --from=base /root/.dotnet /root/.dotnet/
+COPY --from=publish /root/.dotnet /root/.dotnet/
 
 # Needed because https://stackoverflow.com/questions/51977474/install-dotnet-core-tool-dockerfile
 ENV PATH="${PATH}:/root/.dotnet/tools"
